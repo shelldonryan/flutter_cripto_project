@@ -2,7 +2,7 @@ class Coin {
   String icon;
   String name;
   String acronym;
-  String price;
+  double price;
 
   Coin({
     required this.icon,
