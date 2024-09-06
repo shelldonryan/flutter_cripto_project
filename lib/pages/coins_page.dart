@@ -12,26 +12,55 @@ class CoinsPage extends StatefulWidget {
 
 class _CoinsPageState extends State<CoinsPage> {
   final table = CoinRepository.table;
-
   List<Coin> selected = [];
-
   NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
+
+  appBarDynamic() {
+    if (selected.isEmpty) {
+      return AppBar(
+        title: const Center(child: Text('Crypto Currency')),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      );
+    } else {
+      return AppBar(
+        leading: IconButton(
+            onPressed: () {
+              setState(() {
+                selected = [];
+              });
+            },
+            icon: const Icon(Icons.arrow_back)),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        title: Text('${selected.length} selected'),
+        centerTitle: true,
+        elevation: 1,
+        iconTheme: const IconThemeData(color: Colors.white70),
+        titleTextStyle: const TextStyle(
+            color: Colors.white70,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Cripto Moedas')),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      ),
+      appBar: appBarDynamic(),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int coin) {
           return ListTile(
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
-            leading: SizedBox(width: 40, child: Image.asset(table[coin].icon)),
+            leading: (selected.contains(table[coin]))
+                ? const CircleAvatar(
+                    child: Icon(Icons.check),
+                  )
+                : SizedBox(width: 40, child: Image.asset(table[coin].icon)),
             title: Text(
               table[coin].name,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
@@ -55,6 +84,19 @@ class _CoinsPageState extends State<CoinsPage> {
         separatorBuilder: (_, __) => const Divider(),
         itemCount: table.length,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: selected.isNotEmpty ? FloatingActionButton.extended(
+          onPressed: () {},
+          icon: const Icon(Icons.star),
+          label: const Text(
+            "bookmark",
+            style: TextStyle(
+              letterSpacing: 0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+      )
+      : null,
     );
   }
 }
