@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cripto_project/models/coin.dart';
+import 'package:flutter_cripto_project/pages/coin_detail_page.dart';
 import 'package:flutter_cripto_project/repositories/coin_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +16,7 @@ class _CoinsPageState extends State<CoinsPage> {
   List<Coin> selected = [];
   NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
 
-  appBarDynamic() {
+  _appBarDynamic() {
     if (selected.isEmpty) {
       return AppBar(
         title: const Center(child: Text('Crypto Currency')),
@@ -38,18 +39,27 @@ class _CoinsPageState extends State<CoinsPage> {
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.white70),
         titleTextStyle: const TextStyle(
-            color: Colors.white70,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          color: Colors.white70,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       );
     }
+  }
+
+  _showDetails(Coin coin) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CoinDetailPage(coin: coin),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarDynamic(),
+      appBar: _appBarDynamic(),
       body: ListView.separated(
         itemBuilder: (BuildContext context, int coin) {
           return ListTile(
@@ -78,6 +88,7 @@ class _CoinsPageState extends State<CoinsPage> {
                     : selected.add(table[coin]);
               });
             },
+            onTap: () => _showDetails(table[coin]),
           );
         },
         padding: const EdgeInsets.all(16),
@@ -85,18 +96,19 @@ class _CoinsPageState extends State<CoinsPage> {
         itemCount: table.length,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: selected.isNotEmpty ? FloatingActionButton.extended(
-          onPressed: () {},
-          icon: const Icon(Icons.star),
-          label: const Text(
-            "bookmark",
-            style: TextStyle(
-              letterSpacing: 0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-      )
-      : null,
+      floatingActionButton: selected.isNotEmpty
+          ? FloatingActionButton.extended(
+              onPressed: () {},
+              icon: const Icon(Icons.star),
+              label: const Text(
+                "bookmark",
+                style: TextStyle(
+                  letterSpacing: 0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
