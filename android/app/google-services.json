@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "997479363647",
+    "project_id": "flutter-crypto-project",
+    "storage_bucket": "flutter-crypto-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997479363647:android:d679f28429a8cb583ef48a",
+        "android_client_info": {
+          "package_name": "ryan.shelldon.flutter_cripto_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwquWQJrmbfHyKnMMJ42AYCmhJJJKoOww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
