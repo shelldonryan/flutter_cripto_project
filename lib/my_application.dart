@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/coins_page.dart';
+import 'pages/home_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
             .copyWith(onPrimary: Colors.white),
       ),
-      home: const CoinsPage(),
+      home: HomePage(),
     );
   }
 }
