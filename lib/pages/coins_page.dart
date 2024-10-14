@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cripto_project/main.dart';
 import 'package:flutter_cripto_project/models/coin.dart';
 import 'package:flutter_cripto_project/pages/coin_detail_page.dart';
 import 'package:flutter_cripto_project/repositories/coin_repository.dart';
+import 'package:flutter_cripto_project/repositories/favorite_repository.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CoinsPage extends StatefulWidget {
   const CoinsPage({super.key});
@@ -15,6 +18,7 @@ class _CoinsPageState extends State<CoinsPage> {
   final table = CoinRepository.table;
   List<Coin> selected = [];
   NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
+  late FavoriteRepository favoriteRepository;
 
   _appBarDynamic() {
     if (selected.isEmpty) {
@@ -47,6 +51,10 @@ class _CoinsPageState extends State<CoinsPage> {
     }
   }
 
+  clearSelected() {
+    selected.clear();
+  }
+
   _showDetails(Coin coin) {
     Navigator.push(
       context,
@@ -58,6 +66,8 @@ class _CoinsPageState extends State<CoinsPage> {
 
   @override
   Widget build(BuildContext context) {
+    favoriteRepository = context.watch<FavoriteRepository>();
+
     return Scaffold(
       appBar: _appBarDynamic(),
       body: ListView.separated(
@@ -71,9 +81,15 @@ class _CoinsPageState extends State<CoinsPage> {
                     child: Icon(Icons.check),
                   )
                 : SizedBox(width: 40, child: Image.asset(table[coin].icon)),
-            title: Text(
-              table[coin].name,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+            title: Row(
+              children: [
+                Text(
+                  table[coin].name ,
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                ),
+                if (favoriteRepository.list.contains(table[coin]))
+                  const Icon(Icons.star, color: Colors.white10,),
+              ],
             ),
             subtitle: Text(table[coin].acronym),
             trailing: Text(
@@ -98,7 +114,10 @@ class _CoinsPageState extends State<CoinsPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: selected.isNotEmpty
           ? FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: () {
+                favoriteRepository.saveAllCoins(selected);
+                clearSelected();
+              },
               icon: const Icon(Icons.star),
               label: const Text(
                 "bookmark",
